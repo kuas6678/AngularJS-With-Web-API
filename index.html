@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
+
+    <meta charset="utf-8">
+
+    <title>AngularJS</title>
+
+    <style type="text/css">
+        td, th {
+            padding: 10px;
+            text-align: center;
+            background-color: azure;
+            font-family: 微軟正黑體;
+        }
+
+        body {
+            padding: 10px;
+            background-color: #F5FFFA;
+        }
+    </style>
+
+    <script>
+        (function () {
+            var app = angular.module('myApp', []);
+            app.controller('myController', ['$http', function ($http) {
+                var self = this;
+                //this.url = '/api/article';
+                //this.url = '/M_C_Page/api/article';
+				 this.url = 'http://blogapplication.azurewebsites.net/api/values';
+                $http.get(this.url).then(function (response) {
+                    self.data = response.data;
+                }, function (response) {
+                    alert(" 取得資料失敗 ");
+                });
+            }]);
+        })();
+    </script>
+</head>
+<body>
+    <div align="center" ng-controller="myController as myCtrl">
+        <a href="index.html" style="text-decoration: none;">
+            <h1><font style="color: Red;">AngularJS</font> With <font style="color: purple;">ASP.NET Web API</font></h1>
+        </a>
+        <br />
+        <div class="input-group" style="width: 350px;">
+            <span class="input-group-addon">搜尋</span>
+            <input class="form-control" ng-model="search" placeholder="請輸入關鍵字" />
+        </div>
+        <hr />
+        <div ng-if="search">
+            <h5>搜尋結果 : '{{search}}'</h5>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>標題</th>
+                    <th>發表日期</th>
+                    <th>作者</th>
+                    <th>觀看次數</th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="data in myCtrl.data | filter:search | orderBy:'-test_date'"> <!--Sort the array by "test_date", in descending order-->
+                <tr>
+                    <td style="text-align: left;"><a style="white-space: nowrap; overflow: hidden;text-overflow: ellipsis; width: 100px;" href="http://blogapplication.azurewebsites.net/Test/article/{{data.id}}"><span class="glyphicon glyphicon-tags" style="padding: 8px;" aria-hidden="true"></span>{{data.title}}</a></td>
+                    <td>{{data.test_date  | date:"yyyy-MM-dd"}}</td>
+                    <td>{{data.author}}</td>
+                    <td>{{data.hit_no}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <hr />
+        <p><i>Copyright &copy; Ying Hao Chuang. All Rights Reserved.</i></p>
+    </div>
+</body>
+</html>

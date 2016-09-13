@@ -1,0 +1,47 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>GetJson</title>
+    <meta charset="utf-8" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js" type="text/javascript"></script>
+    <style>
+        body {
+            background-color: azure;
+        }
+    </style>
+    <script type="text/javascript">
+        $(function () {
+            //$("input").click(function () {
+            // http://opendata.epa.gov.tw/ws/Data/UV/?$orderby=PublishAgency&$skip=0&$top=1000&format=json&callback=?
+            $.getJSON("http://opendata.epa.gov.tw/ws/Data/REWXQA/?$orderby=SiteName&$skip=0&$top=1000&format=json&callback=?", processData);
+        });
+        //})
+
+        // Callback function
+        function processData(data) {
+            var data = data;
+            var str = "<table style=\"text-align: center;\"  border=1 width=100%>";
+            str += "<tr>";
+            for (var name in data[0]) {
+                str += "<th>" + name + "</th>";
+            }
+            str += "</tr>";
+            for (var i = 0; i < data.length; i++) {
+                str += "<tr onMouseOver=\"this.style.backgroundColor='yellow';\" onMouseOut=\"this.style.backgroundColor='azure';\">";
+                for (var name in data[i]) {
+                    str += "<td>" + data[i][name] + "</td>";
+                }
+                str += "</tr>";
+            }
+            str += "<table>";
+            $("div").html(str);
+        }
+    </script>
+</head>
+<body>
+    <!--<input type="button" value="向伺服器發出非同步請求" />-->
+    <div id="json">
+    </div>
+</body>
+</html>
