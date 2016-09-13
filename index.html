@@ -34,7 +34,7 @@
                 var self = this;
                 //this.url = '/api/article';
                 //this.url = '/M_C_Page/api/article';
-				 this.url = 'http://blogapplication.azurewebsites.net/api/values';
+				 this.url = 'https://blogapplication.azurewebsites.net/api/values';
                 $http.get(this.url).then(function (response) {
                     self.data = response.data;
                 }, function (response) {
@@ -70,7 +70,7 @@
             </thead>
             <tbody ng-repeat="data in myCtrl.data | filter:search | orderBy:'-test_date'"> <!--Sort the array by "test_date", in descending order-->
                 <tr>
-                    <td style="text-align: left;"><a style="white-space: nowrap; overflow: hidden;text-overflow: ellipsis; width: 100px;" href="http://blogapplication.azurewebsites.net/Test/article/{{data.id}}"><span class="glyphicon glyphicon-tags" style="padding: 8px;" aria-hidden="true"></span>{{data.title}}</a></td>
+                    <td style="text-align: left;"><a style="white-space: nowrap; overflow: hidden;text-overflow: ellipsis; width: 100px;" href="https://blogapplication.azurewebsites.net/Test/article/{{data.id}}"><span class="glyphicon glyphicon-tags" style="padding: 8px;" aria-hidden="true"></span>{{data.title}}</a></td>
                     <td>{{data.test_date  | date:"yyyy-MM-dd"}}</td>
                     <td>{{data.author}}</td>
                     <td>{{data.hit_no}}</td>
