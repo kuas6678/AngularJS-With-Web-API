@@ -1,8 +1,6 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html ng-app="myApp">
 <head>
-    <link rel="shortcut icon" href="favicon.png" />
-    
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -22,10 +20,83 @@
             background-color: azure;
             font-family: 微軟正黑體;
         }
-
-        body {
+        td, th {
+            width: 20%;
             padding: 10px;
+            text-align: center;
+            background-color: azure;
+            font-family: 微軟正黑體;
+        }
+        body {
+            padding: 10px 12% 10px 12%;
             background-color: #F5FFFA;
+        }
+        mark {
+            background-color: yellow;
+        }
+        #LoadingText {
+            font-size: medium;
+        }
+        @media screen and (max-width: 767px) {
+            body {
+                padding: 5px 3% 5px 3%;
+            }
+            td, th {
+                padding: 5px;
+            }
+            .logo {
+                display: none;
+            }
+        }
+        #Loading {
+            margin: 100px auto;
+            width: 4px;
+            height: 4px;
+            border-radius: 2px;
+            box-shadow: 0 -12px 0 3px black, /*上*/
+            0 12px 0 1px #333, /*下*/
+            -12px 0 0 1px #333, /*左*/
+            12px 0 0 1px #333, /*右*/
+            -9px -9px 0 1px #333, /*左上*/
+            9px -9px 0 2px #333, /*右上*/
+            -9px 9px 0 1px #333, /*左下*/
+            9px 9px 0 1px #333 /*右下*/;
+            animation: loading 1.5s linear 0s infinite;
+            -webkit-animation: loading 1.5s linear 0s infinite;
+            -o-animation: loading 1.5s linear 0s infinite;
+            -moz-animation: loading 1.5s linear 0s infinite;
+        }
+        @keyframes loading {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        @-webkit-keyframes loading {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
+            to {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+        @-o-keyframes loading {
+            from {
+                -o-transform: rotate(0deg);
+            }
+            to {
+                -o-transform: rotate(360deg);
+            }
+        }
+        @-moz-keyframes loading {
+            from {
+                -moz-transform: rotate(0deg);
+            }
+            to {
+                -moz-transform: rotate(360deg);
+            }
         }
     </style>
 
@@ -38,7 +109,8 @@
                 //this.url = '/M_C_Page/api/article';
 				 this.url = 'https://blogapplication.azurewebsites.net/api/values';
                 $http.get(this.url).then(function (response) {
-                    $("#Loading").hide();
+			// 請求成功時執行的程式碼
+                    $("#Loading, #LoadingText").hide();
                     self.data = response.data;
                 }, function (response) {
                     alert(" 取得資料失敗 ");
@@ -49,38 +121,66 @@
 </head>
 <body>
     <div align="center" ng-controller="myController as myCtrl">
-        <a href="index.html" style="text-decoration: none;">
-            <h1><font style="color: Red;">AngularJS</font> With <font style="color: purple;">ASP.NET Web API</font></h1>
+        <!--<a href="https://angularjs.org/">
+            <img src="images/angularjs.jpg" alt="angularjs" width="60" class="pull-left logo" />
+            <h2 class="pull-left">AngularJS</h2>
+        </a>-->
+        <br /><br />
+        <a href="AngularJS.html" style="text-decoration: none;">
+            <img src="images/angularjs.jpg" alt="angularjs" width="60" class="pull-left logo" />
+            <h1 class="pull-left"><font style="color: Red;">AngularJS</font> With <font style="color: purple;">ASP.NET Web API</font></h1>
         </a>
-        <br />
-        <div class="input-group" style="width: 350px;">
-            <span class="input-group-addon">搜尋</span>
-            <input class="form-control" ng-model="search" placeholder="請輸入關鍵字" />
+        <div class="input-group" style="width: 100%;">
+            <span class="input-group-addon"><span class="input-group-addon">搜尋</span></span>
+            <input class="form-control" ng-model="search" placeholder="請輸入搜尋關鍵字" />
+
+            <!-- Right dropdown-toggle button -->
+            <div class="input-group-btn">
+                <!-- Single button -->
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="api/Article" target="_blank">ASP.NET Web API</a></li>
+                        <li><a href="api/OdataValues?$top=10" target="_blank">Web API With OData</a></li>
+                        <li class="divider"></li>
+                        <li><a href="https://www.asp.net/web-api" target="_blank">關於 ASP.NET Web API</a></li>
+                        <li><a href="https://angularjs.org/" target="_blank">AngularJS 官網</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
         <hr />
-        <p id="Loading">資料載入中......</p>
+        <div id="Loading"></div>
+        <p id="LoadingText">資料載入中 ......</p>
         <div ng-if="search">
-            <h5>搜尋結果 : '{{search}}'</h5>
+            <!--輸入關鍵字後才會出現此區內容。-->
+            <h5>搜尋結果 : '<mark>{{search}}</mark>'</h5>
         </div>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>標題</th>
-                    <th>發表日期</th>
-                    <th>作者</th>
-                    <th>觀看次數</th>
-                </tr>
-            </thead>
-            <tbody ng-repeat="data in myCtrl.data | filter:search | orderBy:'-test_date'"> <!--Sort the array by "test_date", in descending order-->
-                <tr>
-                    <td style="text-align: left;"><a style="white-space: nowrap; overflow: hidden;text-overflow: ellipsis; width: 100px;" href="https://blogapplication.azurewebsites.net/Test/article/{{data.id}}"><span class="glyphicon glyphicon-tags" style="padding: 8px;" aria-hidden="true"></span>{{data.title}}</a></td>
-                    <td>{{data.test_date  | date:"yyyy-MM-dd"}}</td>
-                    <td>{{data.author}}</td>
-                    <td>{{data.hit_no}}</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>標題</th>
+                        <th>分類</th>
+                        <th>發表日期</th>
+                        <th>作者</th>
+                        <th>觀看次數</th>
+                    </tr>
+                </thead>
+                <tbody ng-repeat="data in myCtrl.data | filter:search | orderBy:'-test_date'">
+                    <!--Sort the array by "test_date", in descending order-->
+                    <tr>
+                        <td style="text-align: left;"><a style="white-space: nowrap; overflow: hidden;text-overflow: ellipsis; width: 100px;" href="ngArticle.html?id={{data.id}}"><span class="glyphicon glyphicon-tags" style="padding: 8px;" aria-hidden="true"></span>{{data.title}}</a></td>
+                        <td>{{data.class}}</td>
+                        <td>{{data.test_date  | date:"yyyy-MM-dd"}}</td>
+                        <td>{{data.author}}</td>
+                        <td>{{data.hit_no}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <hr />
         <p><i>Copyright &copy; Ying Hao Chuang. All Rights Reserved.</i></p>
     </div>
