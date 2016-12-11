@@ -81,13 +81,14 @@
         (function () {
 
             var args = {};                             // Start with an empty object
+            var value = null;
             var query = location.search.substring(1);  // Get query string, minus '?'
             var pairs = query.split("&");              // Split at ampersands
             for (var i = 0; i < pairs.length; i++) {    // For each fragment
                 var pos = pairs[i].indexOf('=');       // Look for "name=value"
                 if (pos == -1) continue;               // If not found, skip it
                 var p = pairs[i].substring(0, pos);  // Extract the name
-                var value = pairs[i].substring(pos + 1); // Extract the value
+                value = pairs[i].substring(pos + 1); // Extract the value
                 value = decodeURIComponent(value);     // Decode the value
                 args[name] = value;                    // Store as a property
             }
@@ -102,7 +103,7 @@
                 //this.url = '/api/article/' + value;
                 //this.url = '/M_C_Page/api/odatavalues?$filter=id eq ' + value;  // 改用OData協定進行查詢
                 //this.url = '/M_C_Page/api/article/' + value;
-                 this.url = 'http://blogapplication.azurewebsites.net/api/values/'+ args[name];
+                 this.url = 'http://blogapplication.azurewebsites.net/api/values/'+ value;
                 // 使用AngularJS提供的AJAX技術。
                 $http.get(this.url).then(function (response) {
                     // 請求成功時執行的程式碼
