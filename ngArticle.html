@@ -8,13 +8,11 @@
 
     <link href="bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet" />
 
-    <script src="js/js/jquery-1.11.2.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 
     <script src="bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
-
-    <link href="octicons/octicons.css" rel="stylesheet" media="screen" type="text/css" />
 
     <meta charset="utf-8">
 
@@ -102,9 +100,9 @@
             app.controller('myController', ['$http', function ($http) {
                 var self = this;
                 //this.url = '/api/article/' + value;
-                this.url = '/M_C_Page/api/odatavalues?$filter=id eq ' + value;  // 改用OData協定進行查詢
+                //this.url = '/M_C_Page/api/odatavalues?$filter=id eq ' + value;  // 改用OData協定進行查詢
                 //this.url = '/M_C_Page/api/article/' + value;
-                // this.url = 'http://blogapplication.azurewebsites.net/api/values';
+                 this.url = 'http://blogapplication.azurewebsites.net/api/values/'+ value;
                 // 使用AngularJS提供的AJAX技術。
                 $http.get(this.url).then(function (response) {
                     // 請求成功時執行的程式碼
@@ -123,7 +121,6 @@
         <div align="center">
             <br /><br />
             <a href="AngularJS.html" style="text-decoration: none;">
-                <img src="images/angularjs.jpg" alt="angularjs" width="60" class="pull-left logo" />
                 <h1 class="pull-left"><font style="color: Red;">AngularJS</font> With <font style="color: purple;">ASP.NET Web API</font></h1>
             </a>
         </div>
