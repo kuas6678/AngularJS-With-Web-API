@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+
+    <link href="bootstrap-3.3.5-dist/css/bootstrap-theme.min.css" rel="stylesheet" />
+
+    <link href="bootstrap-3.3.5-dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <script src="js/js/jquery-1.11.2.min.js"></script>
+
+    <script src="bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
+
+    <link href="octicons/octicons.css" rel="stylesheet" media="screen" type="text/css" />
+
+    <meta charset="utf-8">
+
+    <title>AngularJS</title>
+
+    <style type="text/css">
+        td, th {
+            padding: 10px;
+            text-align: center;
+            background-color: azure;
+            font-family: 微軟正黑體;
+        }
+
+        body {
+            padding: 10px 12% 10px 12%;
+            background-color: #F5FFFA;
+        }
+
+        pre {
+            display: block; /* fixes a strange ie margin bug */
+            font-family: Courier New;
+            font-size: 10pt;
+            overflow: auto;
+            background: #f0f0f0 url(data:image/gif;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAASwCAYAAAAt7rCDAAAABHNCSVQICAgIfAhkiAAAAQJJREFUeJzt0kEKhDAMBdA4zFmbM+W0upqFOhXrDILwsimFR5pfMrXW5jhZr7PwRlxVX8//jNHrGhExjXzdu9c5IiIz+7iqVmB7Hwp4OMa2nhhwN/PRGEMBh3Zjt6KfpzPztxW9MSAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzAMwzB8HS+J9kUTvzEDMwAAAABJRU5ErkJggg==) left top repeat-y;
+            border: 1px solid #ccc;
+            padding: 10px 10px 10px 21px;
+            line-height: 1.2em;
+            margin: 5px 0px 5px 0px;
+            padding-left: 20px;
+            width: 98%;
+            background-color: white;
+        }
+
+        h1 {
+            color: blue;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .info {
+            padding-bottom: 15px;
+            font-size: small;
+        }
+
+        @media screen and (max-width: 767px) {
+            body {
+                padding: 5px 3% 5px 3%;
+            }
+
+            td, th {
+                padding: 5px;
+            }
+
+            .logo {
+                display: none;
+            }
+        }
+    </style>
+
+    <script>
+        // AngularJS實作CRUD(Create、Read、Update、Delete)
+        // http://bigone2000.pixnet.net/blog/post/98196011-%E4%BB%A5angularjs%E5%AF%A6%E4%BD%9Ccrud(create%E3%80%81read%E3%80%81update%E3%80%81delete)
+        (function () {
+
+            var args = {};                             // Start with an empty object
+            var query = location.search.substring(1);  // Get query string, minus '?'
+            var pairs = query.split("&");              // Split at ampersands
+            for (var i = 0; i < pairs.length; i++) {    // For each fragment
+                var pos = pairs[i].indexOf('=');       // Look for "name=value"
+                if (pos == -1) continue;               // If not found, skip it
+                var p = pairs[i].substring(0, pos);  // Extract the name
+                var value = pairs[i].substring(pos + 1); // Extract the value
+                value = decodeURIComponent(value);     // Decode the value
+                args[name] = value;                    // Store as a property
+            }
+
+            var app = angular.module('myApp', []).filter('to_trusted', ['$sce', function ($sce) {
+                return function (text) {
+                    return $sce.trustAsHtml(text);
+                };
+            }]);;
+            app.controller('myController', ['$http', function ($http) {
+                var self = this;
+                //this.url = '/api/article/' + value;
+                this.url = '/M_C_Page/api/odatavalues?$filter=id eq ' + value;  // 改用OData協定進行查詢
+                //this.url = '/M_C_Page/api/article/' + value;
+                // this.url = 'http://blogapplication.azurewebsites.net/api/values';
+                // 使用AngularJS提供的AJAX技術。
+                $http.get(this.url).then(function (response) {
+                    // 請求成功時執行的程式碼
+                    $("#Loading").hide();
+                    self.data = response.data;
+                }, function (response) {
+                    // 請求失敗時執行的程式碼
+                    alert(" 取得資料失敗 ");
+                });
+            }]);
+        })();
+    </script>
+</head>
+<body>
+    <div ng-controller="myController as myCtrl">
+        <div align="center">
+            <br /><br />
+            <a href="AngularJS.html" style="text-decoration: none;">
+                <img src="images/angularjs.jpg" alt="angularjs" width="60" class="pull-left logo" />
+                <h1 class="pull-left"><font style="color: Red;">AngularJS</font> With <font style="color: purple;">ASP.NET Web API</font></h1>
+            </a>
+        </div>
+        <br /><br /><br />
+        <hr />
+        <div ng-repeat="data in myCtrl.data">
+            <!-- This page shows an individual article according to a Query String parameter id. -->
+            <h1>{{data.title}}</h1>
+            <div class="info">作者 : {{data.author}}&nbsp;&nbsp; 發表日期 : {{data.test_time | date:'yyyy年MM月dd日 HH:mm:ss' }}</div>
+            <div class="summary">{{data.summary}}</div>
+            <hr />
+            <div ng-bind-html="data.article | to_trusted"></div>
+            <br />
+            <input type="button" onclick="javascript: history.back(1)" value="【回上一頁】" style="text-decoration: none; background-color: #F5FFFA; border-style: none; color: blue; font-weight: bold;" />
+            <hr />
+        </div>
+        <div style="text-align: center;">
+            <p><i>Copyright &copy; Ying Hao Chuang. All Rights Reserved.</i></p>
+        </div>
+        <hr />
+    </div>
+</body>
+</html>
