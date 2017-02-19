@@ -143,17 +143,5 @@
         </div>
         <hr />
     </div>
-    <script>
-        $(function () {
-            $("img").each(function () {
-                var N = $(this).attr("src");
-                if (N.charAt(0) == 'U') {
-                    N = "https://azurewebapplicationkuas6678.azurewebsites.net/" + N;
-                    $(this).attr("src", N);
-                }
-                $(this).addClass("img-responsive");
-            })
-        });
-    </script>
 </body>
 </html>
