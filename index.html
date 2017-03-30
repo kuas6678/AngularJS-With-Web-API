@@ -100,23 +100,93 @@
         }
     </style>
 
-    <script>
+       <script>
+        // AngularJS實作CRUD(Create、Read、Update、Delete)
+        // http://bigone2000.pixnet.net/blog/post/98196011-%E4%BB%A5angularjs%E5%AF%A6%E4%BD%9Ccrud(create%E3%80%81read%E3%80%81update%E3%80%81delete)
         (function () {
-            var app = angular.module('myApp', []);
-            app.controller('myController', ['$http', function ($http) {
+            //var app = angular.module('myApp', []);
+            // http://stackoverflow.com/questions/34413732/add-http-basic-authentication-to-this-http-get-in-angularjs
+            var app = angular.module('myApp', ['base64']).config(function ($httpProvider, $base64) {
+                var auth = $base64.encode("BMWlab:bmwlab");
+                $httpProvider.defaults.headers.common['Authorization'] = 'Basic ' + auth; // 將auth認證寫在header中。
+            })
+
+            app.controller('myController', ['$http', function ($http, $base64) {
+                //            $http({
+                //                method: "POST",
+                //                url: '/api/article',
+                //                headers: {
+                //                    Accept: 'application/json',
+                //                    Authorization: 'Basic ' + username + ':' + password
+                //                }
+                //            }).then(function (response) {
+                //                var auth = $base64.encode("foo:bar"),
+                //                headers = { "Authorization": "Basic " + auth };
+                //                //this.url = '/M_C_Page/api/article';
+                //                // this.url = 'http://blogapplication.azurewebsites.net/api/values';
+                //                // 使用AngularJS提供的AJAX技術。
+                //                $http.get('/api/article', {headers: headers}).then(function (response) {
+                //                    // 請求成功時執行的程式碼
+                //                    $("#Loading, #LoadingText").hide();
+                //                    this.data = response.data;
+                //                }, function (response) {
+                //                    // 請求失敗時執行的程式碼
+                //                    alert(" 取得資料失敗 ");
+                //                });
+                //            });
+
+                //var auth = $base64.encode("BMWlab:bmwlab"),headers = { "Authorization": "Basic " + auth };
                 var self = this;
-                //this.url = '/api/article';
-                //this.url = '/M_C_Page/api/article';
-				 this.url = 'https://blogapplication.azurewebsites.net/api/values';
+                var sb = new StringBuilder();
+                //this.url = 'api/article';
+                //this.url = 'Article.json';
+                // this.url = '/M_C_Page/api/article';
+                 this.url = 'https://blogapplication.azurewebsites.net/api/values';
+                // 使用AngularJS提供的AJAX技術。
                 $http.get(this.url).then(function (response) {
-			// 請求成功時執行的程式碼
+                    // 請求成功時執行的程式碼
                     $("#Loading, #LoadingText").hide();
+                    sb.append("總共 : ");
+                    sb.append(response.data.length);
+                    sb.append(" 筆資料 (");
+                    sb.append(response.status);
+                    sb.append(" - ");
+                    sb.append(response.statusText);
+                    sb.append(")");
+                    $("#tags").text(sb.toString());
                     self.data = response.data;
                 }, function (response) {
+                    // 請求失敗時執行的程式碼
                     alert(" 取得資料失敗 ");
                 });
             }]);
         })();
+
+        // Initializes a new instance of the StringBuilder class
+        // and appends the given value if supplied
+        function StringBuilder(value) {
+            this.strings = new Array("");
+            this.append(value);
+        }
+
+        // Appends the given value to the end of this instance.
+        StringBuilder.prototype.append = function (value) {
+            if (value) {
+                this.strings.push(value);
+            }
+        }
+
+        // Clears the string buffer
+        StringBuilder.prototype.clear = function () {
+            this.strings.length = 1;
+        }
+
+        // Converts this instance to a String.
+        StringBuilder.prototype.toString = function () {
+            return this.strings.join("");
+        }
+        //=====================================================
+
     </script>
 </head>
 <body>
@@ -150,6 +220,7 @@
                 </div>
             </div>
         </div>
+        <h5 id="tags" style="float: left; color: #AAAAAA;"></h5>
         <hr />
         <div id="Loading"></div>
         <p id="LoadingText">資料載入中 ......</p>
